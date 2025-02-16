@@ -11,13 +11,45 @@ const MailEditor = () => {
   // Track the currently active editor
   const [activeEditor, setActiveEditor] = useState("editor1");
 
+  const [inputs, setInputs] = useState([{ id: 1, value: "" }]);
+
+  const addInputField = () => {
+    setInputs([...inputs, { id: inputs.length + 1, value: "" }]);
+  };
+
+  const removeInputField = (id) => {
+    setInputs(inputs.filter((input) => input.id !== id));
+  };
+
+  const handleChange = (id, event) => {
+    const newInputs = inputs.map((input) =>
+      input.id === id ? { ...input, value: event.target.value } : input
+    );
+    setInputs(newInputs);
+  };
+
   return (
     <div className="custom-wrapper">
-        <div className="mailto">
-            <label className="me-2">To</label>
-            <input type="text"></input>
-        </div>
-        {/* subject Editor */}
+      <div className="mailto">
+        <label className="me-2">To</label>
+        {inputs.map((input) => (
+          <div
+            key={input.id}
+            className="d-flex"
+          >
+            <input
+              className="rounded-start border ps-2"
+              type="email"
+              value={input.value}
+              onChange={(e) => handleChange(input.id, e)}
+              placeholder={`Email ${input.id}`}
+            />
+            <button className="btn btn-sm btn-danger" onClick={() => removeInputField(input.id)}>Remove</button>
+          </div>
+        ))}
+        <button className="btn btn-sm btn-primary" onClick={addInputField}>Add Email</button>
+      </div>
+      {/* subject Editor */}
       <div onClick={() => setActiveEditor("editor1")}>
         <Editor
           editorState={editorState1}

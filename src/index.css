@@ -12,7 +12,6 @@ body {
   padding: 0;
   box-sizing: border-box;
   height: 100%;
-  
 }
 
 .hidden-editor .rdw-editor-main {
@@ -22,7 +21,11 @@ body {
 .mailto{
   width: 100%;
   border-bottom: 1px solid #ccc;
-  padding: 10px;
+  padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 .custom-wrapper {
@@ -52,6 +55,20 @@ body {
   max-height: 700px;
   width: 100%;
   padding: 5px;
+}
+
+.side_bar{
+  display: flex;
+  justify-content: start;
+  width: 100%;
+  padding: 10px;
+  font-size: large;
+}
+.side_bar:hover{
+  background-color: rgb(96, 177, 232);
+  border-left: 3px solid blue;
+  color: white;
+  cursor: pointer;
 }
 
 .form_container{
