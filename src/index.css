@@ -3,7 +3,7 @@
 * {
   font-family: "Roboto", sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  font-size:medium;
   @apply transition-colors duration-200;
 }
 
@@ -15,9 +15,49 @@ body {
   
 }
 
+.hidden-editor .rdw-editor-main {
+  display: none;
+}
+
+.mailto{
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+}
+
+.custom-wrapper {
+  display: flex;
+  flex-direction: column; 
+  padding: 10px;/* Reverses the order */
+}
+
+.custom-modal-size .modal-dialog {
+  width: 80vw;  /* 80% of viewport width */
+  max-width: 900px;  /* Set max width */
+}
+
+.custom-modal-size .modal-content {
+  height: 70vh; /* 70% of viewport height */
+}
+
+.subject-editor{
+  min-height: 40px;
+  max-height: 80px;
+  width: 100%;
+  padding: 5px;
+  border-bottom: 1px solid #ccc;
+}
+.body-editor {
+  min-height: 50vh;
+  max-height: 700px;
+  width: 100%;
+  padding: 5px;
+}
+
 .form_container{
   width:30%;
 }
+
 @media screen and (max-width:1000px) {
   .form_container{
     width:45%;

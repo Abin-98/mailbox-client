@@ -10,6 +10,7 @@ function App() {
   const idToken = useSelector((state) => state.auth.idToken);
   return (<>
     <ToastContainer/>
+
      {!!idToken && <NavBar />}
       <Routes>
         <Route
