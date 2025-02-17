@@ -72,6 +72,10 @@ body {
   padding: 5px;
 }
 
+.inbox_item:hover{
+  background-color:lightgrey;
+}
+
 .side_bar{
   display: flex;
   justify-content: space-between;

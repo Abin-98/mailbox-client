@@ -25,7 +25,6 @@ const Home = () => {
   }
 
   const sentNumber = Object.keys(mailsList).length
-  const deletedNumber = Object.values(mailsList).reduce((acc, curr)=>(curr.deleted ? acc+1: acc),0)
   const unreadNumber = Object.values(mailsList).reduce((acc, curr)=>(!curr.read ? acc+1: acc),0)
   const starredNumber = Object.values(mailsList).reduce((acc, curr)=>(curr.starred ? acc+1: acc),0)
 
@@ -42,10 +41,10 @@ const Home = () => {
           </button>
           <MailEditor show={show} setShow={setShow} />
 
-          <div className="side_bar" onClick={()=>setPage("home")}><span>Sent</span><span>{sentNumber}</span></div>
+          <div className="side_bar" onClick={()=>setPage("home")}><span>Inbox</span><span>{sentNumber}</span></div>
           <div className="side_bar" onClick={()=>setPage("unread")}><span>Unread</span><span>{unreadNumber}</span></div>
           <div className="side_bar" onClick={()=>setPage("star")}><span>Starred</span><span>{starredNumber}</span></div>
-          <div className="side_bar" onClick={()=>setPage("del")}><span>Deleted Items</span><span>{deletedNumber}</span></div>
+          <div className="side_bar" onClick={()=>setPage("sent")}><span>Sent</span><span>{sentNumber}</span></div>
         </div>
 
         {/* middle part */}
@@ -81,7 +80,7 @@ const Home = () => {
           {page==="star" && Object.keys(mailsList)?.filter((id)=>mailsList[id].starred).map((id) => (
             <InboxMail mailData={mailsList[id]} key={id} id={id} setMailOpened={setMailOpened}/>
           ))}
-          {page==="del" && Object.keys(mailsList)?.filter((id)=>mailsList[id].deleted).map((id) => (
+          {page==="sent"  && Object.keys(mailsList)?.map((id) => (
             <InboxMail mailData={mailsList[id]} key={id} id={id} setMailOpened={setMailOpened}/>
           ))}
         </div>

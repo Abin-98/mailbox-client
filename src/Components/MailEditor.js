@@ -56,7 +56,6 @@ const MailEditor = ({ show, setShow }) => {
         bodyJSX: getBodyHTML(),
         read: false,
         starred: false,
-        deleted: false
       }
 
       // {parse(htmlString)} to parse jsx string to jsx
