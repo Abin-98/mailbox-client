@@ -93,88 +93,99 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup template d-flex justify-content-center align-items-center vh-100 bg-primary">
-      <div className="form_container p-5 rounded bg-white">
-        <form onSubmit={handleSubmit}>
-          <h3 className="text-center">{isLogin ? "Login" : "Sign Up"}</h3>
-          {!isLogin && (
-            <div className="mb-2">
-              <label htmlFor="fname">First Name*</label>
-              <input
-                type="text"
-                placeholder="Enter First Name"
-                className="form-control"
-                value={userData.firstName}
-                onChange={(e) =>
-                  setUserData({ ...userData, firstName: e.target.value })
-                }
-                required
-              />
-            </div>
-          )}
-          {!isLogin && (
-            <div className="mb-2">
-              <label htmlFor="lname">Last Name</label>
-              <input
-                type="text"
-                placeholder="Enter Last Name"
-                className="form-control"
-                value={userData.lastName}
-                onChange={(e) =>
-                  setUserData({ ...userData, lastName: e.target.value })
-                }
-              />
-            </div>
-          )}
-          <div className="mb-2">
-            <label htmlFor="email">Email*</label>
-            <input
-              type="email"
-              placeholder="Enter Email"
-              className="form-control"
-              value={userData.email}
-              onChange={(e) =>
-                setUserData({ ...userData, email: e.target.value })
-              }
-              required
-            />
-          </div>
-          <div className="mb-2">
-            <label htmlFor="password">Password*</label>
-            <input
-              type="password"
-              placeholder="Enter Password"
-              className="form-control"
-              value={userData.password}
-              onChange={(e) =>
-                setUserData({ ...userData, password: e.target.value })
-              }
-              required
-            />
-          </div>
-
-          <div className="d-grid mt-2">
-            <button type="submit" className="btn btn-primary">
-              {isLogin ? "Login" : "Sign Up"}
-            </button>
-          </div>
-          <p className="text-end mt-2">
-            <button
-              onClick={() => setIsLogin((prev) => !prev)}
-              className="ms-2"
-            >
-              {isLogin ? "Sign Up" : "Already Registerd? Login here"}
-            </button>
-          </p>
-        </form>
-        <div className="text-center mt-2 ">
-          <button
-            className="btn btn-light d-flex justify-content-center mx-auto"
-            onClick={handleGoogleSignIn}
+    <div className="signup template d-flex justify-content-center align-items-center vh-100 bg-signup">
+      <div className="form_container p-2 rounded bg-white">
+        <div className="row row-cols-1 row-cols-md-2 w-100 h-100 px-3 py-1">
+          <div
+            className="col-6 bg-signup-interior border"
+            style={{ minHeight: "40rem" }}
+          ></div>
+          <div
+            className="col-6 h-100 p-5 rounded bg-white"
+            style={{ minHeight: "40rem" }}
           >
-            <img src={google} alt="google icon" width={20} height={20} />
-            <span>Sign In with Google</span>
-          </button>
+            <form onSubmit={handleSubmit}>
+              <h3 className="text-center">{isLogin ? "Login" : "Sign Up"}</h3>
+              {!isLogin && (
+                <div className="mb-2">
+                  <label htmlFor="fname">First Name*</label>
+                  <input
+                    type="text"
+                    placeholder="Enter First Name"
+                    className="form-control"
+                    value={userData.firstName}
+                    onChange={(e) =>
+                      setUserData({ ...userData, firstName: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+              )}
+              {!isLogin && (
+                <div className="mb-2">
+                  <label htmlFor="lname">Last Name</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Last Name"
+                    className="form-control"
+                    value={userData.lastName}
+                    onChange={(e) =>
+                      setUserData({ ...userData, lastName: e.target.value })
+                    }
+                  />
+                </div>
+              )}
+              <div className="mb-2">
+                <label htmlFor="email">Email*</label>
+                <input
+                  type="email"
+                  placeholder="Enter Email"
+                  className="form-control"
+                  value={userData.email}
+                  onChange={(e) =>
+                    setUserData({ ...userData, email: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="mb-2">
+                <label htmlFor="password">Password*</label>
+                <input
+                  type="password"
+                  placeholder="Enter Password"
+                  className="form-control"
+                  value={userData.password}
+                  onChange={(e) =>
+                    setUserData({ ...userData, password: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div className="d-grid mt-2">
+                <button type="submit" className="btn btn-primary">
+                  {isLogin ? "Login" : "Sign Up"}
+                </button>
+              </div>
+              <p className="text-end mt-2">
+                <button
+                  onClick={() => setIsLogin((prev) => !prev)}
+                  className="ms-2"
+                >
+                  {isLogin ? "Sign Up" : "Already Registerd? Login here"}
+                </button>
+              </p>
+            </form>
+            <div className="text-center mt-2">
+              <button
+                className="btn btn-light d-flex justify-content-center mx-auto"
+                onClick={handleGoogleSignIn}
+              >
+                <img src={google} alt="google icon" width={20} height={20} />
+                <span>Sign In with Google</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

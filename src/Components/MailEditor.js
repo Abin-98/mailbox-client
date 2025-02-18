@@ -13,7 +13,8 @@ const MailEditor = ({ show, setShow }) => {
   const [editorState1, setEditorState1] = useState(EditorState.createEmpty());
   const [editorState2, setEditorState2] = useState(EditorState.createEmpty());
   const dispatch = useDispatch();
-  const mailsList = useSelector((state) => state.mail.mailsList);
+  const sentMailsList = useSelector((state) => state.mail.sentMailsList);
+  const inboxMailsList = useSelector((state) => state.mail.inboxMailsList);
   const userEmail = useSelector((state) => state.auth.userEmail);
   const emailEncoded = userEmail.replace(/\./g, "_");
 
@@ -32,37 +33,65 @@ const MailEditor = ({ show, setShow }) => {
     setEditorState2(EditorState.createEmpty());
   };
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSend = async (data) => {
     try {
-        setIsLoading(true)
-      if (inputs[0].value === "" || getSubjectHTML() === "<p></p>") {
-        toast.error("You forgot to add email ID or subject for the mail.", {
+      setIsLoading(true);
+
+      // validations before sending
+      if (inputs[0].value === "") {
+        toast.error("You forgot to add email ID.", {
           closeOnClick: true,
         });
+        setIsLoading(false);
         return;
       }
-      const currentTime = new Date()
-      console.log(getSubjectHTML());
-      console.log(getBodyHTML());
-      console.log(currentTime);
-      
-      const mailData = {
-        sender: userEmail,
+      const subjectHTML = getSubjectHTML();
+      if (subjectHTML == "<p></p>\n") {
+        toast.error("You forgot to add subject for the mail.", {
+          closeOnClick: true,
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      if (subjectHTML.length >= 70) {
+        toast.error("Please limit subject to 70 characters.", {
+          closeOnClick: true,
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      let invalid = false;
+      invalid = inputs.some((input) => {
+        return !/^[^@]+@[^@]+\.[^@]+$/.test(input.value);
+      });
+      if (invalid) {
+        toast.error("Please enter valid email ID.", {
+          closeOnClick: true,
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      const currentTime = String(new Date())
+
+      const sentMailData = {
         date: currentTime,
         recipients: inputs.map((input) => input.value),
         subjectJSX: getSubjectHTML(),
         bodyJSX: getBodyHTML(),
         read: false,
         starred: false,
-      }
+      };
 
-      // {parse(htmlString)} to parse jsx string to jsx
+      // sending to sent mails of sender
 
       const res = await axios.post(
-        `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}.json`,
-        mailData
+        `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/sent.json`,
+        sentMailData
       );
       console.log("response from realtime db post", res);
       console.log("email", userEmail);
@@ -70,25 +99,56 @@ const MailEditor = ({ show, setShow }) => {
       const id = res.data?.name;
 
       dispatch(
-        mailActions.addToMailList({
-          ...mailsList,
-          [id]: {...mailData},
+        mailActions.addToSentMailList({
+          ...sentMailsList,
+          [id]: { ...sentMailData },
         })
       );
+
+      //sending to Inbox mails of reciever(s)
+      inputs.forEach(async (input) => {
+        const encoded = input.value.replace(/\./g, "_");
+
+        const inboxMailData = {
+          date: currentTime,
+          sender: userEmail,
+          subjectJSX: getSubjectHTML(),
+          bodyJSX: getBodyHTML(),
+          read: false,
+          starred: false,
+        };
+
+        const res = await axios.post(
+          `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${encoded}/inbox.json`,
+          inboxMailData
+        );
+        console.log("response from realtime db post", res);
+        console.log("email", userEmail);
+
+        const id = res.data?.name;
+
+        if (input.value === userEmail) {
+          dispatch(mailActions.addToInboxMailList({
+              ...inboxMailsList,
+              [id]: { ...inboxMailData },
+            })
+          );
+        }
+      });
 
       // Reset input fields
       setInputs([{ id: 1, value: "" }]);
       setEditorState1(EditorState.createEmpty());
       setEditorState2(EditorState.createEmpty());
 
-      console.log(mailsList);
+      console.log(sentMailsList);
       setShow(false);
-      setIsLoading(false)
-      toast.success("Mail Sent", {closeOnClick: true})
+      setIsLoading(false);
+      toast.success("Mail Sent", { closeOnClick: true });
     } catch (err) {
       toast.error("Something went wrong!", { closeOnClick: true });
       console.log(err);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -215,7 +275,7 @@ const MailEditor = ({ show, setShow }) => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleSend}>
-          {isLoading? "Sending..." : "Send"}
+          {isLoading ? "Sending..." : "Send"}
         </Button>
         <Button variant="secondary" onClick={handleClear}>
           Clear

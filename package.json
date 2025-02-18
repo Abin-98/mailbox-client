@@ -27,6 +27,7 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^11.0.3",
     "react-tooltip": "^5.28.0",
+    "react-truncate": "^2.4.0",
     "redux": "^5.0.1",
     "web-vitals": "^2.1.4"
   },

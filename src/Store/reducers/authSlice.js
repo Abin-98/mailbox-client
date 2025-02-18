@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialAuthState = {
   idToken: localStorage.getItem("idToken") || "",
   userEmail: localStorage.getItem("userEmail") || "",
-  userName: localStorage.getItem("userName"),
+  userName: localStorage.getItem("userName") || "",
+  userProfilePic: "",
   emailVerified: false
 };
 
@@ -22,7 +23,10 @@ const authSlice = createSlice({
     },
     setEmailVerified(state, action) {
         state.emailVerified = action.payload;
-    }
+    },
+    setProfilePic(state, action) {
+      state.emailVerified = action.payload;
+  }
   },
 });
 

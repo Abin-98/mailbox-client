@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import parse from "html-react-parser";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,15 +7,17 @@ import { mailActions } from "../Store/reducers/mailSlice";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import Truncate from "react-truncate";
 
-const InboxMail = ({ mailData, id, setMailOpened }) => {
-  const mailsList = useSelector((state) => state.mail.mailsList);
+const InboxMail = ({ mailData, id, sent, sendIDtoHome }) => {
+  const sentMailsList = useSelector((state) => state.mail.sentMailsList);
+  const inboxMailsList = useSelector(state => state.mail.inboxMailsList);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const userEmail = useSelector((state) => state.auth.userEmail);
   const emailEncoded = userEmail.replace(/\./g, "_");
-  const newDate = new Date(mailData?.date);
-  const formattedDate = newDate?.toLocaleString("en-US", {
+  const newDate = new Date(mailData?.date)
+  const formattedDate = newDate?.toLocaleString("en-IN", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -24,63 +25,83 @@ const InboxMail = ({ mailData, id, setMailOpened }) => {
     minute: "2-digit",
     hour12: false,
   });
+  let url = "";
+  url = sent
+    ? `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/sent/${id}.json`
+    : `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/inbox/${id}.json`;
 
+
+  const mailsList = sent ? sentMailsList : inboxMailsList
   const [isHovered, setIsHovered] = useState(false);
+  const [checked, setChecked] = useState(false)
 
+  const handleCheckChange = (e) => {
+    setChecked(e.target.checked)
+    sendIDtoHome({sent: sent, id: id, action:"delete", openMail: false})
+  }
 
   const handleDelete = async () => {
     const newMailsList = { ...mailsList };
     delete newMailsList[id];
-    console.log(newMailsList);
+
     try {
-        const response = await axios.delete(
-          `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/${id}.json`,
-        );
-        console.log("Here in delete function!!!", response.data);
+      const response = await axios.delete(url);
+        console.log(response);
+    sent ?
+      dispatch(mailActions.addToSentMailList({ ...newMailsList }))
+    :
+      dispatch(mailActions.addToInboxMailList({ ...newMailsList }))
 
-        dispatch(mailActions.addToMailList({ ...newMailsList }));
-
-      } catch (err) {
-        console.log(err);
-      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleOpenMail = async () => {
-    setMailOpened(true);
     if (!mailsList[id].read) {
       try {
-        const response = await axios.put(
-          `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/${id}.json`,
-          { ...mailsList[id], read: true }
-        );
-        console.log("Here!!!", response.data);
+        const response = await axios.put(url, {
+          ...mailsList[id],
+          read: true,
+        });
+        console.log("Here in handleOpenMail()!!!", response.data);
 
-        dispatch(
-          mailActions.addToMailList({
+        sent ? dispatch(mailActions.addToSentMailList({
             ...mailsList,
             [id]: { ...mailsList[id], read: true },
           })
-        );
+        )  
+        : dispatch(mailActions.addToInboxMailList({
+              ...mailsList,
+              [id]: { ...mailsList[id], read: true },
+            })
+          )
       } catch (err) {
         console.log(err);
       }
     }
+    sendIDtoHome({sent: sent, id: id, action:"show", openMail: true})
   };
 
   const handleReadToggle = async () => {
     try {
-      const response = await axios.put(
-        `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/${id}.json`,
-        { ...mailsList[id], read: !mailsList[id].read }
-      );
-      console.log(response.data);
+      const response = await axios.put(url, {
+        ...mailsList[id],
+        read: !mailsList[id].read,
+      });
+      console.log("handleReadToggle", response.data);
 
-      dispatch(
-        mailActions.addToMailList({
+      sent ? dispatch(
+        mailActions.addToSentMailList({
           ...mailsList,
           [id]: { ...mailsList[id], read: !mailsList[id].read },
         })
-      );
+        ) 
+        : dispatch(mailActions.addToInboxMailList({
+          ...mailsList,
+          [id]: { ...mailsList[id], read: !mailsList[id].read },
+        })
+      )
     } catch (err) {
       console.log(err);
     }
@@ -88,18 +109,24 @@ const InboxMail = ({ mailData, id, setMailOpened }) => {
 
   const handleStarToggle = async () => {
     try {
-      const response = await axios.put(
-        `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/${id}.json`,
-        { ...mailsList[id], starred: !mailsList[id].starred }
-      );
-      console.log(response.data);
+      const response = await axios.put(url, {
+        ...mailsList[id],
+        starred: !mailsList[id].starred,
+      });
+      console.log("handleStarToggle", response.data);
 
-      dispatch(
-        mailActions.addToMailList({
+      sent ? dispatch(
+        mailActions.addToSentMailList({
           ...mailsList,
           [id]: { ...mailsList[id], starred: !mailsList[id].starred },
         })
-      );
+      ) 
+      : dispatch(
+        mailActions.addToInboxMailList({
+          ...mailsList,
+          [id]: { ...mailsList[id], starred: !mailsList[id].starred },
+        })
+      ) 
     } catch (err) {
       console.log(err);
     }
@@ -116,7 +143,8 @@ const InboxMail = ({ mailData, id, setMailOpened }) => {
           <Form className="ps-1">
             <Form.Check
               type="checkbox"
-              checked={false}
+              checked={checked}
+              onChange={(e)=>handleCheckChange(e)}
               role="button"
               // onChange={(e) => setAllChecked(prev=>!prev)}
             />
@@ -131,7 +159,16 @@ const InboxMail = ({ mailData, id, setMailOpened }) => {
           ></span>
         </div>
         <div className="col-2 d-flex justify-content-start align-items-center">
-          <span>{mailData.recipients[0]}</span>
+          {sent ? (
+            mailData.recipients.map((recipient) => (
+              <span className="w-full text-truncate">
+                {recipient}
+                {mailData.recipients.length > 1 && ", "}
+              </span>
+            ))
+          ) : (
+            <span className="w-full text-truncate">{mailData?.sender}</span>
+          )}
         </div>
         <div className="col-7 d-flex justify-content-start align-items-center">
           {mailData.starred ? (
@@ -148,19 +185,25 @@ const InboxMail = ({ mailData, id, setMailOpened }) => {
             />
           )}
           <span
-            className="p-1 me-2 editorText subject"
+            className="p-1 me-2 w-100 editorText"
             role="button"
             onClick={handleOpenMail}
           >
-            {parse(mailData.subjectJSX)}
+            <Truncate lines={1} ellipsis={<span>...</span>}>
+            <div
+                dangerouslySetInnerHTML={{ __html: mailData.subjectJSX + " >> " + mailData.bodyJSX }}
+                />
+            </Truncate>
           </span>
+          {/*<Truncate lines={1} ellipsis={<span className="w-100 flex-grow-1">...</span>}>
           <span
             className="p-1 editorText mailBody"
             role="button"
             onClick={handleOpenMail}
+            dangerouslySetInnerHTML={{ __html: mailData.bodyJSX }}
           >
-            {parse(mailData.bodyJSX)}
           </span>
+          </Truncate>*/}
         </div>
         <div className="col-2 d-flex justify-content-end align-items-center">
           {isHovered ? (
