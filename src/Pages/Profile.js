@@ -48,6 +48,7 @@ const Profile = () => {
         toast.error("Failed to get User info", { closeOnClick: true });
         console.log(err)
         });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (e) => {
@@ -97,9 +98,9 @@ const Profile = () => {
       })
       .catch((err) => {
         console.log(err);
-        if (err?.code == "auth/invalid-id-token") {
+        if (err?.code === "auth/invalid-id-token") {
           toast.error("Session expired! Please login again");
-        } else if (err?.message == "auth/user-not-found") {
+        } else if (err?.message === "auth/user-not-found") {
           toast.error("User not found! Please Sign up");
         }
         dispatch(authActions.setIdToken(""));

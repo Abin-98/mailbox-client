@@ -9,10 +9,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import Truncate from "react-truncate";
 
-const InboxMail = ({ mailData, id, sent, sendIDtoHome }) => {
+const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
+    const dispatch = useDispatch();
   const sentMailsList = useSelector((state) => state.mail.sentMailsList);
   const inboxMailsList = useSelector(state => state.mail.inboxMailsList);
-  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const userEmail = useSelector((state) => state.auth.userEmail);
   const emailEncoded = userEmail.replace(/\./g, "_");
@@ -30,14 +30,15 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome }) => {
     ? `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/sent/${id}.json`
     : `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/inbox/${id}.json`;
 
-
   const mailsList = sent ? sentMailsList : inboxMailsList
   const [isHovered, setIsHovered] = useState(false);
   const [checked, setChecked] = useState(false)
 
-  const handleCheckChange = (e) => {
+  const handleCheckChange =(e) =>{
     setChecked(e.target.checked)
-    sendIDtoHome({sent: sent, id: id, action:"delete", openMail: false})
+    console.log({sent: sent, id: id, action:"delete", openMail: false, isChecked: e.target.checked});
+    
+    sendIDtoHome({sent: sent, id: id, action:"delete", openMail: false, isChecked: e.target.checked})
   }
 
   const handleDelete = async () => {
@@ -80,7 +81,7 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome }) => {
         console.log(err);
       }
     }
-    sendIDtoHome({sent: sent, id: id, action:"show", openMail: true})
+    sendIDtoHome({sent: sent, id: id, action:"show", openMail: true, isChecked: checked})
   };
 
   const handleReadToggle = async () => {
@@ -134,9 +135,10 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome }) => {
 
   return (
     <div
-      className="container-fluid py-2 border-bottom border-3 border-light inbox_item"
+      className={`container-fluid py-2 border-bottom border-1 border-secondary ${checked ? "inbox-checked" : "inbox_item"} `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      key={id}
     >
       <div className="row">
         <div className="col-1 d-flex justify-content-between align-items-center">
@@ -144,19 +146,22 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome }) => {
             <Form.Check
               type="checkbox"
               checked={checked}
-              onChange={(e)=>handleCheckChange(e)}
+              onChange={handleCheckChange}
               role="button"
               // onChange={(e) => setAllChecked(prev=>!prev)}
             />
           </Form>
-          <span
+          {sent?
+          <span className="p-1 mx-1"></span>
+          : <span
             role="button"
             style={{ width: "10px", height: "10px" }}
-            className={`rounded-circle ${
-              mailData.read ? "border" : "bg-primary"
+            className={`rounded-circle px-1 mx-1 ${
+              mailData.read ? "border border-dark" : "bg-primary"
             }`}
             onClick={handleReadToggle}
           ></span>
+        }
         </div>
         <div className="col-2 d-flex justify-content-start align-items-center">
           {sent ? (

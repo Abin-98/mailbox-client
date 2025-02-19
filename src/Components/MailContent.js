@@ -15,17 +15,17 @@ const MailContent = ({ mailToShow }) => {
   });
 
   return (
-    <div className="container-fluid py-2 border-bottom border-3 border-dark">
+    <div className="container-fluid py-2 border-bottom border-3 border-dark bg-light">
       <div className="d-flex flex-column justify-content-center">
         <div className="h5 p-1 d-flex">
             <span className="me-2">{"Subject: "}</span><span>{parse(mailToShow?.subjectJSX)}</span>
         </div>
-        <div>
+        <div className="pb-3">
           {mailToShow?.recipients ? (
             <>
               <span className="p-1">Recipients:</span>
                 {mailToShow?.recipients.map((recipient) => (
-                  <span className="me-2">
+                  <span className="me-2 p-3 border rounded-pill">
                     <AccountCircleIcon fontSize="large" />
                     <span>{recipient}</span>
                   </span>
@@ -42,7 +42,6 @@ const MailContent = ({ mailToShow }) => {
           )}
         </div>
       </div>
-      <div className="d-flex gap-1"></div>
       <div style={{minHeight:"20rem"}} className="p-3 mb-4 border">
         <div className="d-flex justify-content-end" style={{color:"grey", fontSize:"0.8rem"}}>{formattedDate}</div>
         {parse(mailToShow?.bodyJSX)}

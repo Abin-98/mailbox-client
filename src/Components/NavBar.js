@@ -12,6 +12,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from "react-router-dom";
 import { searchActions } from "../Store/reducers/searchSlice";
 import SearchIcon from '@mui/icons-material/Search';
+import logo from '../assets/logo.png'
 
 function NavBar() {
 
@@ -27,10 +28,10 @@ function NavBar() {
   };
 
   return (
-    <Navbar expand="md" className="py-3" style={{ backgroundColor: "#9082ff" }}>
+    <Navbar expand="md" className="py-3" style={{background: "linear-gradient(to bottom, #dbc100, #ffff38, #dbc100)"}} >
       <Container fluid className="d-flex">
-        <Navbar.Brand href="#action0" style={{maxWidth:"300px"}} className="flex-grow-1 text-light text-center text-xl">
-        📬 MailNest
+        <Navbar.Brand as={Link} to={'/'} style={{maxWidth:"300px"}} className="flex-grow-1 text-light text-center text-xl">
+          <img src={logo} alt="logo" width={150} height={40}/>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-md`} />
         <Navbar.Offcanvas
@@ -38,11 +39,6 @@ function NavBar() {
           aria-labelledby={`offcanvasNavbarLabel-expand-md`}
           placement="end"
         >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id={`offcanvasNavbarLabel-expand-md`}>
-              Offcanvas
-            </Offcanvas.Title>
-          </Offcanvas.Header>
           <Offcanvas.Body>
             <Form className="d-flex w-50 pe-3">
               <Form.Control

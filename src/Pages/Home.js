@@ -14,6 +14,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { mailActions } from "../Store/reducers/mailSlice";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import CreateIcon from '@mui/icons-material/Create';
 
 const Home = () => {
   const [show, setShow] = useState(false);
@@ -31,7 +32,7 @@ const Home = () => {
   const searchText = useSelector(state=>state.search.searchText)
   const [showModal, setShowModal] = useState(false);
 
-  const retrieveIDtoShow=({sent, id, action, openMail})=>{
+  const retrieveIDtoShow=({sent, id, action, openMail, isChecked})=>{
     if(action==="show") {
       const mailsList = sent ? sentMailsList : inboxMailsList
       console.log("sent from inboxMail.js", sent);
@@ -40,42 +41,47 @@ const Home = () => {
       setMailOpened(openMail)
     }
     else if(action ==="delete") {
-      console.log(id);
-      
-      setIDsToDelete(prev=>[...prev, {sent, id}])
+      setIDsToDelete(prev => isChecked ? [...prev, {sent, id}] : prev.filter((item) => item.id!==id))
+      console.log(IDsToDelete);
     }
   }
 
   const handleDeleteAll = ()=>{
-
     console.log(IDsToDelete);
     if(!IDsToDelete.length){
       toast.error("Please select atleast one mail to delete", {closeOnClick: true})
       setShowModal(false)
       return
     }
+    let isSent;
+    let newMailsList;
+    try{
     IDsToDelete.forEach(async(item)=>{
-    try {
+    
+      isSent=item.sent
     const url = item.sent
     ? `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/sent/${item.id}.json`
     : `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/inbox/${item.id}.json`;
     const mailsList = item.sent ? sentMailsList : inboxMailsList
-    const newMailsList = { ...mailsList };
+    newMailsList = { ...mailsList };
     delete newMailsList[item.id];
 
     const response = await axios.delete(url);
+    
     console.log(response);
-    item.sent ?
+  })
+    isSent ?
       dispatch(mailActions.addToSentMailList({ ...newMailsList }))
     :
       dispatch(mailActions.addToInboxMailList({ ...newMailsList }));
-
-    setShowModal(false)
     } 
     catch (err) {
+      toast.error("Something went wrong", {closeOnClick: true})
       console.log(err);
     }
-    })
+
+    setShowModal(false)
+    setIDsToDelete([])
   }
 
   const inboxNumber = inboxMailsList ? Object.keys(inboxMailsList)?.length : 0
@@ -135,28 +141,29 @@ const Home = () => {
   }, []);
 
   return (
-    <section className="container-fluid">
-      {/* Right side */}
-      <div className="row vh-100">
-        <div className="col-2 d-flex flex-column align-items-center p-3" style={{backgroundColor:"#d6d6d6"}}>
+    <section className="container-fluid" style={{backgroundColor:"#444"}}>
+      <div className="row min-vh-100">
+
+        {/*Right side*/}
+        <div className="col-md-2 col-12 d-flex flex-column align-items-center p-3" style={{backgroundColor:"#444"}}>
           <button
-            className="btn btn-primary w-100 p-3 mb-3"
+            className="btn btn-primary w-100 p-2 mb-3"
             onClick={() => setShow(true)}
-          >
+          ><CreateIcon className="me-1 mb-2"/>
             Compose
           </button>
           <MailEditor show={show} setShow={setShow}/>
 
-          <div className={`side_bar ${page==="home" && "border border-dark"}`} onClick={()=>{setMailOpened(false); setPage("home")}}><span>Inbox</span><span>{inboxNumber}</span></div>
-          <div className={`side_bar ${page==="unread" && "border border-dark"}`} onClick={()=>{setMailOpened(false); setPage("unread")}}><span>Unread</span><span>{unreadNumber}</span></div>
-          <div className={`side_bar ${page==="star" && "border border-dark"}`} onClick={()=>{setMailOpened(false); setPage("star")}}><span>Starred</span><span>{starredInboxNumber+starredSentNumber}</span></div>
-          <div className={`side_bar ${page==="sent" && "border border-dark"}`} onClick={()=>{setMailOpened(false); setPage("sent")}}><span>Sent</span><span>{sentNumber}</span></div>
+          <div className={`side_bar ${page==="home" && "border border-light"}`} onClick={()=>{setMailOpened(false); setPage("home")}}><span>Inbox</span><span>{inboxNumber}</span></div>
+          <div className={`side_bar ${page==="unread" && "border border-light"}`} onClick={()=>{setMailOpened(false); setPage("unread")}}><span>Unread</span><span>{unreadNumber}</span></div>
+          <div className={`side_bar ${page==="star" && "border border-light"}`} onClick={()=>{setMailOpened(false); setPage("star")}}><span>Starred</span><span>{starredInboxNumber+starredSentNumber}</span></div>
+          <div className={`side_bar ${page==="sent" && "border border-light"}`} onClick={()=>{setMailOpened(false); setPage("sent")}}><span>Sent</span><span>{sentNumber}</span></div>
         </div>
 
         {/* middle part */}
         {mailOpened ? 
-        <div className="col-7 p-0 rounded-4 rounded-top">
-          <div className="d-flex justify-content-start border-bottom border-3 p-3" role="button" onClick={()=>setMailOpened(false)}>
+        <div className="col-md-7 col-12 p-0 bg-light ">
+          <div className="mt-1 d-flex justify-content-start border-bottom border-dark border-3 p-3 rounded-4 rounded-bottom-0" role="button" onClick={()=>setMailOpened(false)}>
             <KeyboardBackspaceIcon />
             <span className="ms-2">
               Back
@@ -165,15 +172,17 @@ const Home = () => {
             <MailContent mailToShow={mailToShow}/>
           </div> 
           :
-        <div className="col-7 p-0 rounded-4 rounded-top">
-          <div className="d-flex justify-content-between border-bottom border-3 p-3">
-            <Form>
+        <div className="col-md-7 col-12 p-0 rounded-4 rounded-bottom-0 bg-light border-dark">
+          <div className="d-flex justify-content-between border-bottom border-3 border-dark p-3">
+            <Form className="d-flex gap-3">
               <Form.Check
                 type="checkbox"
                 checked={selectAll}
-                onChange={(e) => setSelectAll(prev=>!prev)}
+                onChange={(e) => {console.log(IDsToDelete);
+                 setSelectAll(e.target.checked)}}
                 role="button"
               />
+              <label>{selectAll? "Unselect All":"Select All"}</label>
             </Form>
             <Tooltip title="Delete selected mails" arrow>
               <DeleteIcon role="button" onClick={()=>setShowModal(true)}/>
@@ -185,7 +194,7 @@ const Home = () => {
                 <span className="text-primary">Delete Mails ?</span>
               </Modal.Title>
             </Modal.Header>
-            <Modal.Body>{"Are you sure you want to delete all the selected mail(s) ?"}</Modal.Body>
+            <Modal.Body>{`Are you sure you want to delete all the ${IDsToDelete.length} selected mail(s) ?`}</Modal.Body>
             <Modal.Footer>
               <Button
                 variant="outline-dark"
@@ -204,7 +213,7 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).map((id) => (
-            <InboxMail mailData={inboxMailsList[id]} key={id} id={id} sent={false} sendIDtoHome={retrieveIDtoShow}/>
+            <InboxMail mailData={inboxMailsList[id]} key={id} id={id} sent={false} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
           ))}
 
           {page==="unread" && inboxMailsList && Object.keys(inboxMailsList)?.reverse().filter((id)=>{
@@ -212,7 +221,7 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).filter((id)=>inboxMailsList[id].read)?.map((id) => (
-            <InboxMail mailData={inboxMailsList[id]} key={id} id={id} sent={false} sendIDtoHome={retrieveIDtoShow}/>
+            <InboxMail mailData={inboxMailsList[id]} key={id} id={id} sent={false} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
           ))}
 
           {page==="star" && inboxMailsList && Object.keys(inboxMailsList)?.reverse().filter((id)=>{
@@ -220,7 +229,7 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).filter((id)=>inboxMailsList[id].starred)?.map((id) => (
-            <InboxMail mailData={inboxMailsList[id]} key={`inbox_${id}`} id={id} sent={false} sendIDtoHome={retrieveIDtoShow}/>
+            <InboxMail mailData={inboxMailsList[id]} key={`inbox_${id}`} id={id} sent={false} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
           ))}
 
           {page==="star" && sentMailsList && Object.keys(sentMailsList)?.reverse().filter((id)=>{
@@ -228,7 +237,7 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).filter((id)=>sentMailsList[id].starred)?.map((id) => (
-            <InboxMail mailData={sentMailsList[id]} key={`sent_${id}`} id={id} sent={true} sendIDtoHome={retrieveIDtoShow}/>
+            <InboxMail mailData={sentMailsList[id]} key={`sent_${id}`} id={id} sent={true} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
           ))}
 
           {page==="sent" && sentMailsList && Object.keys(sentMailsList)?.reverse().filter((id)=>{
@@ -236,14 +245,14 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).map((id) => (
-            <InboxMail mailData={sentMailsList[id]} key={id} id={id} sent={true} sendIDtoHome={retrieveIDtoShow}/>
+            <InboxMail mailData={sentMailsList[id]} key={id} id={id} sent={true} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
           ))}
 
         </div>
         }
 
         {/* Left side */}
-        <div className="col-3 d-flex flex-column align-items-center pt-3" style={{backgroundColor:"#d6d6d6"}}>
+        <div className="col-md-3 col-12 d-flex flex-column align-items-center pt-3">
           <div className={`mb-3 position-relative ${closeAd[1] && "d-none"} w-full`} style={{height:"250px"}} >
             <button
               onClick={() => setCloseAd((prev) => ({ ...prev, 1: 1 }))}

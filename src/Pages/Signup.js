@@ -8,6 +8,7 @@ import { authActions } from "../Store/reducers/authSlice";
 import axios from "axios";
 import { signInWithPopup } from "firebase/auth";
 import google from "../assets/google.png";
+import logo from '../assets/logo.png'
 
 const Signup = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -93,15 +94,17 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup template d-flex justify-content-center align-items-center vh-100 bg-signup">
+    <div className="signup template d-flex justify-content-center align-items-center min-vh-100 bg-signup">
+      <img src={logo} alt="logo" width={200} height={90} className="position-absolute top-0 p-4"/>
       <div className="form_container p-2 rounded bg-white">
-        <div className="row row-cols-1 row-cols-md-2 w-100 h-100 px-3 py-1">
+        <div className="row w-100 h-100 px-3 py-1">
+          
           <div
-            className="col-6 bg-signup-interior border"
+            className={`col-lg-6 ${isLogin && "order-2"}  col-12 bg-signup-interior border`}
             style={{ minHeight: "40rem" }}
           ></div>
           <div
-            className="col-6 h-100 p-5 rounded bg-white"
+            className={`col-lg-6 ${isLogin && "order-1"} col-12 h-100 p-5 rounded bg-white`}
             style={{ minHeight: "40rem" }}
           >
             <form onSubmit={handleSubmit}>
@@ -170,15 +173,15 @@ const Signup = () => {
               <p className="text-end mt-2">
                 <button
                   onClick={() => setIsLogin((prev) => !prev)}
-                  className="ms-2"
+                  className="btn btn-outline-dark ms-2"
                 >
-                  {isLogin ? "Sign Up" : "Already Registerd? Login here"}
+                  {isLogin ? "New Here? Sign Up" : "Already Registerd? Login here"}
                 </button>
               </p>
             </form>
-            <div className="text-center mt-2">
+            <div className="w-full mt-5">
               <button
-                className="btn btn-light d-flex justify-content-center mx-auto"
+                className="btn btn-light d-flex gap-3 align-items-center justify-content-center mx-auto border"
                 onClick={handleGoogleSignIn}
               >
                 <img src={google} alt="google icon" width={20} height={20} />

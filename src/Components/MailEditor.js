@@ -48,7 +48,7 @@ const MailEditor = ({ show, setShow }) => {
         return;
       }
       const subjectHTML = getSubjectHTML();
-      if (subjectHTML == "<p></p>\n") {
+      if (subjectHTML === "<p></p>\n") {
         toast.error("You forgot to add subject for the mail.", {
           closeOnClick: true,
         });

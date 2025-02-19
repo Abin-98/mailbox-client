@@ -3,7 +3,9 @@
 * {
   font-family: "Roboto", sans-serif;
   line-height: 1.5;
+  transition: 150s ease
   @apply transition-colors duration-200;
+
 }
 
 
@@ -77,9 +79,9 @@ body {
 .bg-signup {
   background-image: url("./assets/signupbg.jpg");
   margin: 0;
-  height: 100vh;
+  min-height: 100vh;
   background-size: cover;
-  background-position: center;
+  background-position: top;
   background-repeat: no-repeat;
 }
 
@@ -87,10 +89,17 @@ body {
   background-image: url("./assets/signup.jpg");
   margin: 0;
   background-size: cover;
-  background-position: center;
+  background-position: left;
   background-repeat: no-repeat;
 }
 
+.inbox-checked{
+  background-color: lightgrey;
+}
+
+.inbox_item{
+  background-color:lavender;
+}
 .inbox_item:hover{
   background-color:lightgrey;
 }
@@ -106,8 +115,10 @@ body {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
   font-size: large;
+  color: white;
 }
 .side_bar:hover{
   background-color: rgb(96, 177, 232);
@@ -133,3 +144,27 @@ body {
     width:65%;
   }
 }
+@keyframes sidewise-invisible{
+0%{
+
+}
+50%{
+  display: none;
+
+}
+100%{
+  display: block;
+}
+}
+
+@keyframes sidewise-visible{
+  0%{
+  
+  }
+  50%{
+  
+  }
+  100%{
+  
+  }
+  }
