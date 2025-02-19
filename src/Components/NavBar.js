@@ -40,7 +40,7 @@ function NavBar() {
           placement="end"
         >
           <Offcanvas.Body>
-            <Form className="d-flex w-50 pe-3">
+            <Form className="d-flex w-100 pe-3">
               <Form.Control
                 type="search"
                 placeholder="Find messages, subjects or people"
@@ -51,8 +51,8 @@ function NavBar() {
               />
               <Button variant="dark" className="px-4 rounded-0 rounded-end-2"><SearchIcon/></Button>
             </Form>
-            <Nav className="justify-content-center align-items-center w-25 flex-grow-1 pe-3">
-              <Nav.Link as={Link} to="/" className="d-flex align-items-center me-3"><HomeIcon className="me-1 text-dark"/>Home</Nav.Link>
+            <Nav className="justify-content-center align-items-center w-100 flex-grow-1 pe-3">
+              <Nav.Link as={Link} to="/" className="d-flex flex-column flex-md-row justify-content-center align-items-center my-md-0 my-3 me-md-3"><HomeIcon className="me-1 text-dark"/><span>Home</span></Nav.Link>
               <AccountCircleIcon className=""/>
               <NavDropdown
                 title="Profile"
