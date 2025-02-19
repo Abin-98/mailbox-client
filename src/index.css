@@ -99,6 +99,10 @@ body {
 
 .inbox_item{
   background-color:lavender;
+  animation-name: slideInBottom;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
 }
 .inbox_item:hover{
   background-color:lightgrey;
@@ -132,6 +136,10 @@ body {
   min-width: 25rem;
   margin-left: 5px;
   margin-right: 5px;
+  animation-name: slideInLeft;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
 }
 
 @media screen and (max-width:1000px) {
@@ -144,6 +152,25 @@ body {
     width:65%;
   }
 }
+
+@keyframes slideInBottom{
+  from{
+    transform: translateY(50px);
+  }
+  to{
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft{
+  from{
+    transform: translateX(-100vw);
+  }
+  to{
+    transform: translateX(0);
+  }
+}
+
 @keyframes sidewise-invisible{
 0%{
 

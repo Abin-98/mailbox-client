@@ -46,7 +46,7 @@ const Home = () => {
     }
   }
 
-  const handleDeleteAll = ()=>{
+  const handleDeleteAll = () => {
     console.log(IDsToDelete);
     if(!IDsToDelete.length){
       toast.error("Please select atleast one mail to delete", {closeOnClick: true})
@@ -55,33 +55,35 @@ const Home = () => {
     }
     let isSent;
     let newMailsList;
-    try{
-    IDsToDelete.forEach(async(item)=>{
-    
-      isSent=item.sent
-    const url = item.sent
-    ? `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/sent/${item.id}.json`
-    : `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/inbox/${item.id}.json`;
-    const mailsList = item.sent ? sentMailsList : inboxMailsList
-    newMailsList = { ...mailsList };
-    delete newMailsList[item.id];
 
-    const response = await axios.delete(url);
+    try {
+      IDsToDelete.forEach(async(item,i)=>{
+      if(i === 0){
+        isSent = item.sent
+        newMailsList = isSent ? {...sentMailsList} : {...inboxMailsList}
+      }
+
+      const url = isSent
+      ? `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/sent/${item.id}.json`
+      : `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/inbox/${item.id}.json`;
+
+      delete newMailsList[item.id];
+
+      const response = await axios.delete(url);
     
-    console.log(response);
-  })
-    isSent ?
-      dispatch(mailActions.addToSentMailList({ ...newMailsList }))
-    :
-      dispatch(mailActions.addToInboxMailList({ ...newMailsList }));
+      console.log(response);
+    })
+    isSent ? dispatch(mailActions.addToSentMailList({ ...newMailsList })) 
+    : dispatch(mailActions.addToInboxMailList({ ...newMailsList }));
     } 
     catch (err) {
       toast.error("Something went wrong", {closeOnClick: true})
       console.log(err);
     }
-
+    finally{
     setShowModal(false)
     setIDsToDelete([])
+    }
   }
 
   const inboxNumber = inboxMailsList ? Object.keys(inboxMailsList)?.length : 0
@@ -141,11 +143,11 @@ const Home = () => {
   }, []);
 
   return (
-    <section className="container-fluid" style={{backgroundColor:"#444"}}>
+    <section className="container-fluid" style={{backgroundColor:"#888888"}}>
       <div className="row min-vh-100">
 
         {/*Right side*/}
-        <div className="col-md-2 col-12 d-flex flex-column align-items-center p-3" style={{backgroundColor:"#444"}}>
+        <div className="col-md-2 col-12 d-flex flex-column align-items-center p-3" style={{background: "linear-gradient(to right, #000000, #888888)"}}>
           <button
             className="btn btn-primary w-100 p-2 mb-3"
             onClick={() => setShow(true)}
@@ -172,8 +174,8 @@ const Home = () => {
             <MailContent mailToShow={mailToShow}/>
           </div> 
           :
-        <div className="col-md-7 col-12 p-0 rounded-4 rounded-bottom-0 bg-light border-dark">
-          <div className="d-flex justify-content-between border-bottom border-3 border-dark p-3">
+        <div className="col-md-7 vh-100 col-12 p-0 rounded-4 rounded-bottom-0 bg-light border-dark">
+          <div className="d-flex justify-content-between shadow-lg p-3">
             <Form className="d-flex gap-3">
               <Form.Check
                 type="checkbox"
@@ -252,7 +254,7 @@ const Home = () => {
         }
 
         {/* Left side */}
-        <div className="col-md-3 col-12 d-flex flex-column align-items-center pt-3">
+        <div className="col-md-3 col-12 d-flex flex-column align-items-center pt-3" style={{background: "linear-gradient(to left, #000000, #888888)"}}>
           <div className={`mb-3 position-relative ${closeAd[1] && "d-none"} w-full`} style={{height:"250px"}} >
             <button
               onClick={() => setCloseAd((prev) => ({ ...prev, 1: 1 }))}
