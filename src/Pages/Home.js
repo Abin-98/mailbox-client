@@ -151,7 +151,7 @@ const Home = () => {
           <button
             className="btn btn-primary w-100 p-2 mb-3"
             onClick={() => setShow(true)}
-          ><CreateIcon className="me-1 mb-2"/>
+          ><CreateIcon className="me-1 mb-2 magnify_hover"/>
             Compose
           </button>
           <MailEditor show={show} setShow={setShow}/>
@@ -164,8 +164,8 @@ const Home = () => {
 
         {/* middle part */}
         {mailOpened ? 
-        <div className="col-md-7 col-12 p-0 bg-light ">
-          <div className="mt-1 d-flex justify-content-start border-bottom border-dark border-3 p-3 rounded-4 rounded-bottom-0" role="button" onClick={()=>setMailOpened(false)}>
+        <div className="col-md-7 col-12 p-0 bg-light rounded-4 rounded-bottom-0">
+          <div className="mt-1 d-flex justify-content-start border-bottom border-dark p-3" role="button" onClick={()=>setMailOpened(false)}>
             <KeyboardBackspaceIcon />
             <span className="ms-2">
               Back
@@ -187,7 +187,7 @@ const Home = () => {
               <label>{selectAll? "Unselect All":"Select All"}</label>
             </Form>
             <Tooltip title="Delete selected mails" arrow>
-              <DeleteIcon role="button" onClick={()=>setShowModal(true)}/>
+              <DeleteIcon role="button" className="magnify_hover" onClick={()=>setShowModal(true)}/>
             </Tooltip>
             <Modal show={showModal} onHide={() => setShowModal(false)}>
             <Modal.Header closeButton>

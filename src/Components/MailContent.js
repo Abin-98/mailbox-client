@@ -15,7 +15,7 @@ const MailContent = ({ mailToShow }) => {
   });
 
   return (
-    <div className="container-fluid py-2 border-bottom border-3 border-dark bg-light">
+    <div className="container-fluid py-2 border-bottom border-dark shadow-xl">
       <div className="d-flex flex-column justify-content-center">
         <div className="h5 p-1 d-flex">
             <span className="me-2">{"Subject: "}</span><span>{parse(mailToShow?.subjectJSX)}</span>

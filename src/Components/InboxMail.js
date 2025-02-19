@@ -8,6 +8,7 @@ import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import Truncate from "react-truncate";
+import { Tooltip } from "@mui/material";
 
 const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
     const dispatch = useDispatch();
@@ -35,9 +36,7 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
   const [checked, setChecked] = useState(false)
 
   const handleCheckChange =(e) =>{
-    setChecked(e.target.checked)
-    console.log({sent: sent, id: id, action:"delete", openMail: false, isChecked: e.target.checked});
-    
+    setChecked(e.target.checked)   
     sendIDtoHome({sent: sent, id: id, action:"delete", openMail: false, isChecked: e.target.checked})
   }
 
@@ -212,11 +211,13 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
         </div>
         <div className="col-2 d-flex justify-content-end align-items-center">
           {isHovered ? (
+            <Tooltip title="Delete this mail" arrow>
             <DeleteIcon
               role="button"
-              className="me-1"
+              className="me-1 magnify_hover"
               onClick={() => setShowModal(true)}
             />
+            </Tooltip>
           ) : (
             <span className="date">{formattedDate}</span>
           )}

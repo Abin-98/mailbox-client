@@ -96,11 +96,10 @@ const Signup = () => {
   return (
     <div className="signup template d-flex justify-content-center align-items-center min-vh-100 bg-signup">
       <img src={logo} alt="logo" width={200} height={90} className="position-absolute top-0 p-4"/>
-      <div className="form_container p-2 rounded bg-white">
+      <div className="form_container p-2 bg-white my-2">
         <div className="row w-100 h-100 px-3 py-1">
-          
           <div
-            className={`col-lg-6 ${isLogin && "order-2"}  col-12 bg-signup-interior border`}
+            className={`col-lg-6 ${isLogin && "order-2"} col-12 bg-signup-interior border rounded-5`}
             style={{ minHeight: "40rem" }}
           ></div>
           <div
@@ -165,7 +164,7 @@ const Signup = () => {
                 />
               </div>
 
-              <div className="d-grid mt-2">
+              <div className="d-grid mt-3">
                 <button type="submit" className="btn btn-primary">
                   {isLogin ? "Login" : "Sign Up"}
                 </button>
@@ -179,7 +178,8 @@ const Signup = () => {
                 </button>
               </p>
             </form>
-            <div className="w-full mt-5">
+            <div className="w-full d-flex my-4"><hr className="line flex-grow-1 me-3"/><span>or</span><hr className="ms-3 line flex-grow-1"/></div>
+            <div className="w-full">
               <button
                 className="btn btn-light d-flex gap-3 align-items-center justify-content-center mx-auto border"
                 onClick={handleGoogleSignIn}

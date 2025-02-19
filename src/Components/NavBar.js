@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { searchActions } from "../Store/reducers/searchSlice";
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../assets/logo.png'
+import { Tooltip } from "@mui/material";
 
 function NavBar() {
 
@@ -49,11 +50,19 @@ function NavBar() {
                 value={searchText}
                 onChange={(e)=>dispatch(searchActions.setSearchText(e.target.value))}
               />
-              <Button variant="dark" className="px-4 rounded-0 rounded-end-2"><SearchIcon/></Button>
+              <Tooltip title="Search" arrow>
+                <Button variant="dark" className="px-4 rounded-0 rounded-end-2">
+                  <SearchIcon className="magnify_hover"/>
+                </Button>
+              </Tooltip>
             </Form>
             <Nav className="justify-content-center align-items-center w-100 flex-grow-1 pe-3">
-              <Nav.Link as={Link} to="/" className="d-flex flex-column flex-md-row justify-content-center align-items-center my-md-0 my-3 me-md-3"><HomeIcon className="me-1 text-dark"/><span>Home</span></Nav.Link>
-              <AccountCircleIcon className=""/>
+              <Nav.Link as={Link} to="/" className="my-md-0 my-3 me-md-3">
+              <Tooltip title="Go to Home" arrow className="d-flex flex-column flex-md-row justify-content-center align-items-center">
+                <HomeIcon className="me-1 text-dark magnify_hover"/><span>Home</span>
+              </Tooltip>
+              </Nav.Link>
+              <AccountCircleIcon className="magnify_hover"/>
               <NavDropdown
                 title="Profile"
                 id={`offcanvasNavbarDropdown-expand-md`}
