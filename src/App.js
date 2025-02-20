@@ -24,6 +24,7 @@ function App() {
         element={idToken ? <Profile /> : <Navigate to={"/signup"} replace />}
       />
         <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={idToken ? <Home /> : <Signup />} />
       </Routes>
     </>
   );
