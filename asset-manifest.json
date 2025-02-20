@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/your-repo-name/static/css/main.b2ab0571.css",
+    "main.js": "/your-repo-name/static/js/main.b9bfb0a7.js",
+    "static/js/453.a5a7f378.chunk.js": "/your-repo-name/static/js/453.a5a7f378.chunk.js",
+    "static/media/signup.jpg": "/your-repo-name/static/media/signup.df18d671c2bb540e72e7.jpg",
+    "static/media/signupbg.jpg": "/your-repo-name/static/media/signupbg.ec366472eb52294a8db8.jpg",
+    "static/media/ad2.jpg": "/your-repo-name/static/media/ad2.d9a5374c67e337d63f8b.jpg",
+    "static/media/ad3.png": "/your-repo-name/static/media/ad3.c43fcde3fc786abd9739.png",
+    "static/media/ad1.jpg": "/your-repo-name/static/media/ad1.1fd7ce073c65c0068e09.jpg",
+    "static/media/google.png": "/your-repo-name/static/media/google.cadee8cdb0c0afb1a713.png",
+    "static/media/logo.png": "/your-repo-name/static/media/logo.7941633db7bf86715d33.png",
+    "index.html": "/your-repo-name/index.html",
+    "main.b2ab0571.css.map": "/your-repo-name/static/css/main.b2ab0571.css.map",
+    "main.b9bfb0a7.js.map": "/your-repo-name/static/js/main.b9bfb0a7.js.map",
+    "453.a5a7f378.chunk.js.map": "/your-repo-name/static/js/453.a5a7f378.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b2ab0571.css",
+    "static/js/main.b9bfb0a7.js"
+  ]
+}
