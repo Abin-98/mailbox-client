@@ -127,7 +127,7 @@ const Home = () => {
         }
       } finally {
         if (isMounted) {
-          setTimeout(fetchData, 5000); // Call fetchData again after 5 seconds
+          setTimeout(fetchData, 2000); // Call fetchData again after 5 seconds
         }
       }
     };
