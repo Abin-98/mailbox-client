@@ -3,26 +3,21 @@
 * {
   font-family: "Roboto", sans-serif;
   line-height: 1.5;
-  transition: 150s ease
-  @apply transition-colors duration-200;
-
 }
 
-
-
-.editorText p{
+.editorText p {
   margin: 0;
 }
 
-.subject{
+.subject {
   font-weight: bold;
 }
 
-.mailBody{
-  font-weight:200;
+.mailBody {
+  font-weight: 200;
 }
 
-.date{
+.date {
   font-size: small;
 }
 
@@ -37,7 +32,7 @@ body {
   display: none;
 }
 
-.mailto{
+.mailto {
   width: 100%;
   border-bottom: 1px solid #ccc;
   padding-bottom: 8px;
@@ -49,20 +44,20 @@ body {
 
 .custom-wrapper {
   display: flex;
-  flex-direction: column; 
-  padding: 10px;/* Reverses the order */
+  flex-direction: column;
+  padding: 10px; /* Reverses the order */
 }
 
 .custom-modal-size .modal-dialog {
-  width: 80vw;  /* 80% of viewport width */
-  max-width: 900px;  /* Set max width */
+  width: 80vw; /* 80% of viewport width */
+  max-width: 900px; /* Set max width */
 }
 
 .custom-modal-size .modal-content {
   height: 70vh; /* 70% of viewport height */
 }
 
-.subject-editor{
+.subject-editor {
   min-height: 40px;
   max-height: 80px;
   width: 100%;
@@ -85,7 +80,7 @@ body {
   background-repeat: no-repeat;
 }
 
-.bg-signup-interior{
+.bg-signup-interior {
   background-image: url("./assets/signup.jpg");
   margin: 0;
   background-size: cover;
@@ -93,19 +88,19 @@ body {
   background-repeat: no-repeat;
 }
 
-.inbox-checked{
+.inbox-checked {
   background-color: lightgrey;
 }
 
-.inbox_item{
-  background-color:lavender;
+.inbox_item {
+  background-color: lavender;
   animation-name: slideInBottom;
   animation-duration: 0.5s;
-  animation-timing-function: ease;
+  animation-timing-function: ease-in;
   animation-fill-mode: forwards;
 }
-.inbox_item:hover{
-  background-color:lightgrey;
+.inbox_item:hover {
+  background-color: lightgrey;
 }
 
 .responsive-img {
@@ -114,26 +109,26 @@ body {
   object-fit: cover; /* You can use 'contain' if you want to preserve aspect ratio */
 }
 
-.magnify_hover:hover{
+.magnify_hover:hover {
   animation-name: magnify;
   animation-duration: 1s;
   animation-fill-mode: forwards;
   animation-timing-function: ease-in-out;
 }
 
-@keyframes magnify{
-  0%{
-    scale:1
+@keyframes magnify {
+  0% {
+    scale: 1;
   }
-  50%{
-    scale:1.5
+  50% {
+    scale: 1.5;
   }
-  100%{
-    scale:1.2
+  100% {
+    scale: 1.2;
   }
 }
 
-.side_bar{
+.side_bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -143,19 +138,19 @@ body {
   font-size: large;
   color: white;
 }
-.side_bar:hover{
+.side_bar:hover {
   background-color: rgb(96, 177, 232);
   border-left: 3px solid blue;
   color: white;
   cursor: pointer;
 }
 
-.line{
+.line {
   transform: translateY(-4px);
 }
 
-.form_container{
-  width:60%;
+.form_container {
+  width: 60%;
   min-width: 25rem;
   margin-left: 5px;
   margin-right: 5px;
@@ -166,42 +161,57 @@ body {
   animation-fill-mode: forwards;
 }
 
-@media screen and (max-width:1000px) {
-  .form_container{
-    width:45%;
+@media screen and (max-width: 1000px) {
+  .form_container {
+    width: 45%;
   }
 }
-@media screen and (max-width:700px) {
-  .form_container{
-    width:95%;
+@media screen and (max-width: 700px) {
+  .form_container {
+    width: 95%;
   }
 }
 
-@keyframes slideInBottom{
-  0%{
+@keyframes slideInBottom {
+  0% {
     opacity: 0;
     transform: translateY(30px);
   }
-  50%{
+  50% {
     opacity: 0.3;
     transform: translateX(10);
   }
-  100%{
+  100% {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
-@keyframes slideInFadeIn{
-  0%{
+.zoom:hover {
+  animation-name: zoom;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes zoom {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.07;
+  }
+}
+
+@keyframes slideInFadeIn {
+  0% {
     opacity: 0;
     scale: 0.5;
   }
-  40%{
+  40% {
     opacity: 0;
     scale: 0.6;
   }
-  100%{
+  100% {
     opacity: 1;
     scale: 1;
   }

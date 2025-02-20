@@ -3,8 +3,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import parse from "html-react-parser";
 
 const MailContent = ({ mailToShow }) => {
-  console.log("mail object", mailToShow);
-  const newDate = new Date(mailToShow?.date)
+  const newDate = new Date(mailToShow?.date);
   const formattedDate = newDate?.toLocaleString("en-IN", {
     day: "numeric",
     month: "short",
@@ -17,24 +16,25 @@ const MailContent = ({ mailToShow }) => {
   return (
     <div className="container-fluid py-2 border-bottom border-dark shadow-xl">
       <div className="d-flex flex-column justify-content-center">
-        <div className="h5 p-1 d-flex">
-            <span className="me-2">{"Subject: "}</span><span>{parse(mailToShow?.subjectJSX)}</span>
+        <div className="h5 p-1 d-flex my-3">
+          <span className="me-2">{"Subject: "}</span>
+          <span>{parse(mailToShow?.subjectJSX)}</span>
         </div>
         <div className="pb-3">
           {mailToShow?.recipients ? (
             <>
               <span className="p-1">Recipients:</span>
-                {mailToShow?.recipients.map((recipient) => (
-                  <span className="me-2 p-3 border rounded-pill">
-                    <AccountCircleIcon fontSize="large" />
-                    <span>{recipient}</span>
-                  </span>
-                ))}
+              {mailToShow?.recipients.map((recipient) => (
+                <span className="me-2 px-2 py-3 border rounded-pill">
+                  <AccountCircleIcon fontSize="large" />
+                  <span>{recipient}</span>
+                </span>
+              ))}
             </>
           ) : (
             <span>
               {"Sender: "}
-              <span>
+              <span className="me-2 px-2 py-3 border rounded-pill">
                 <AccountCircleIcon fontSize="large" />
                 {mailToShow?.sender}
               </span>
@@ -42,10 +42,15 @@ const MailContent = ({ mailToShow }) => {
           )}
         </div>
       </div>
-      <div style={{minHeight:"20rem"}} className="p-3 mb-4 border">
-        <div className="d-flex justify-content-end" style={{color:"grey", fontSize:"0.8rem"}}>{formattedDate}</div>
+      <div style={{ minHeight: "20rem" }} className="p-3 mb-4 border">
+        <div
+          className="d-flex justify-content-end"
+          style={{ color: "grey", fontSize: "0.8rem" }}
+        >
+          {formattedDate}
+        </div>
         {parse(mailToShow?.bodyJSX)}
-    </div>
+      </div>
     </div>
   );
 };

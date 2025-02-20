@@ -5,7 +5,7 @@ import ad2 from "../assets/ad2.jpg";
 import ad3 from "../assets/ad3.png";
 import { useDispatch, useSelector } from "react-redux";
 import InboxMail from "../Components/InboxMail";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Tooltip } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -28,7 +28,6 @@ const Home = () => {
   const userEmail = useSelector((state) => state.auth.userEmail);
   const emailEncoded = userEmail.replace(/\./g, "_");
   const [IDsToDelete, setIDsToDelete] = useState([])
-  const [selectAll, setSelectAll] = useState(false)
   const searchText = useSelector(state=>state.search.searchText)
   const [showModal, setShowModal] = useState(false);
 
@@ -149,9 +148,9 @@ const Home = () => {
         {/*Right side*/}
         <div className="col-md-2 col-12 d-flex flex-column align-items-center p-3" style={{background: "linear-gradient(to right, #000000, #888888)"}}>
           <button
-            className="btn btn-primary w-100 p-2 mb-3"
+            className="btn btn-primary w-100 p-2 my-4 zoom"
             onClick={() => setShow(true)}
-          ><CreateIcon className="me-1 mb-2 magnify_hover"/>
+          ><CreateIcon className="me-1 mb-2"/>
             Compose
           </button>
           <MailEditor show={show} setShow={setShow}/>
@@ -164,7 +163,7 @@ const Home = () => {
 
         {/* middle part */}
         {mailOpened ? 
-        <div className="col-md-7 col-12 p-0 bg-light rounded-4 rounded-bottom-0">
+        <div className="col-md-7 col-12 p-0 bg-light rounded-4 rounded-bottom-0 mt-2">
           <div className="mt-1 d-flex justify-content-start border-bottom border-dark p-3" role="button" onClick={()=>setMailOpened(false)}>
             <KeyboardBackspaceIcon />
             <span className="ms-2">
@@ -174,18 +173,9 @@ const Home = () => {
             <MailContent mailToShow={mailToShow}/>
           </div> 
           :
-        <div className="col-md-7 vh-100 col-12 p-0 rounded-4 rounded-bottom-0 bg-light border-dark">
-          <div className="d-flex justify-content-between shadow-lg p-3">
-            <Form className="d-flex gap-3">
-              <Form.Check
-                type="checkbox"
-                checked={selectAll}
-                onChange={(e) => {console.log(IDsToDelete);
-                 setSelectAll(e.target.checked)}}
-                role="button"
-              />
-              <label>{selectAll? "Unselect All":"Select All"}</label>
-            </Form>
+        <div className="col-md-7 vh-100 col-12 p-0 rounded-4 rounded-bottom-0 bg-light border-dark mt-2">
+          <div className="d-flex justify-content-end shadow-lg p-3">
+
             <Tooltip title="Delete selected mails" arrow>
               <DeleteIcon role="button" className="magnify_hover" onClick={()=>setShowModal(true)}/>
             </Tooltip>
@@ -215,7 +205,7 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).map((id) => (
-            <InboxMail mailData={inboxMailsList[id]} key={id} id={id} sent={false} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
+            <InboxMail mailData={inboxMailsList[id]} key={id} id={id} sent={false} sendIDtoHome={retrieveIDtoShow}/>
           ))}
 
           {page==="unread" && inboxMailsList && Object.keys(inboxMailsList)?.reverse().filter((id)=>{
@@ -223,7 +213,7 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).filter((id)=>inboxMailsList[id].read)?.map((id) => (
-            <InboxMail mailData={inboxMailsList[id]} key={id} id={id} sent={false} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
+            <InboxMail mailData={inboxMailsList[id]} key={id} id={id} sent={false} sendIDtoHome={retrieveIDtoShow}/>
           ))}
 
           {page==="star" && inboxMailsList && Object.keys(inboxMailsList)?.reverse().filter((id)=>{
@@ -231,7 +221,7 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).filter((id)=>inboxMailsList[id].starred)?.map((id) => (
-            <InboxMail mailData={inboxMailsList[id]} key={`inbox_${id}`} id={id} sent={false} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
+            <InboxMail mailData={inboxMailsList[id]} key={`inbox_${id}`} id={id} sent={false} sendIDtoHome={retrieveIDtoShow} />
           ))}
 
           {page==="star" && sentMailsList && Object.keys(sentMailsList)?.reverse().filter((id)=>{
@@ -239,7 +229,7 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).filter((id)=>sentMailsList[id].starred)?.map((id) => (
-            <InboxMail mailData={sentMailsList[id]} key={`sent_${id}`} id={id} sent={true} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
+            <InboxMail mailData={sentMailsList[id]} key={`sent_${id}`} id={id} sent={true} sendIDtoHome={retrieveIDtoShow} />
           ))}
 
           {page==="sent" && sentMailsList && Object.keys(sentMailsList)?.reverse().filter((id)=>{
@@ -247,7 +237,7 @@ const Home = () => {
             const regex = new RegExp(searchText, "gi"); 
             return regex.test(str)
           }).map((id) => (
-            <InboxMail mailData={sentMailsList[id]} key={id} id={id} sent={true} sendIDtoHome={retrieveIDtoShow} selectAll={selectAll}/>
+            <InboxMail mailData={sentMailsList[id]} key={id} id={id} sent={true} sendIDtoHome={retrieveIDtoShow} />
           ))}
 
         </div>
@@ -255,7 +245,7 @@ const Home = () => {
 
         {/* Left side */}
         <div className="col-md-3 col-12 d-flex flex-column align-items-center pt-3" style={{background: "linear-gradient(to left, #000000, #888888)"}}>
-          <div className={`mb-3 position-relative ${closeAd[1] && "d-none"} w-full`} style={{height:"250px"}} >
+          <div className={`my-3 position-relative ${closeAd[1] && "d-none"} w-full`} style={{height:"250px"}} >
             <button
               onClick={() => setCloseAd((prev) => ({ ...prev, 1: 1 }))}
               className="btn btn-sm btn-danger position-absolute top-0 start-0"

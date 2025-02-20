@@ -7,19 +7,18 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../Store/reducers/authSlice";
-import HomeIcon from '@mui/icons-material/Home';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HomeIcon from "@mui/icons-material/Home";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
 import { searchActions } from "../Store/reducers/searchSlice";
-import SearchIcon from '@mui/icons-material/Search';
-import logo from '../assets/logo.png'
+import SearchIcon from "@mui/icons-material/Search";
+import logo from "../assets/logo.png";
 import { Tooltip } from "@mui/material";
 
 function NavBar() {
-
-  const dispatch = useDispatch()
-  const name = useSelector(state=>state.auth.userName)
-  const searchText = useSelector(state=>state.search.searchText)
+  const dispatch = useDispatch();
+  const name = useSelector((state) => state.auth.userName);
+  const searchText = useSelector((state) => state.search.searchText);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -29,10 +28,21 @@ function NavBar() {
   };
 
   return (
-    <Navbar expand="md" className="py-3" style={{background: "linear-gradient(to bottom, #dbc100, #ffff38, #dbc100)"}} >
+    <Navbar
+      expand="md"
+      className="py-3"
+      style={{
+        background: "linear-gradient(to bottom, #dbc100, #ffff38, #dbc100)",
+      }}
+    >
       <Container fluid className="d-flex">
-        <Navbar.Brand as={Link} to={'/'} style={{maxWidth:"300px"}} className="flex-grow-1 text-light text-center text-xl">
-          <img src={logo} alt="logo" width={150} height={40}/>
+        <Navbar.Brand
+          as={Link}
+          to={"/"}
+          style={{ maxWidth: "300px" }}
+          className="flex-grow-1 text-light text-center text-xl"
+        >
+          <img src={logo} alt="logo" width={150} height={40} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-md`} />
         <Navbar.Offcanvas
@@ -48,35 +58,44 @@ function NavBar() {
                 className="rounded-0 rounded-start-2"
                 aria-label="Search"
                 value={searchText}
-                onChange={(e)=>dispatch(searchActions.setSearchText(e.target.value))}
+                onChange={(e) =>
+                  dispatch(searchActions.setSearchText(e.target.value))
+                }
               />
               <Tooltip title="Search" arrow>
                 <Button variant="dark" className="px-4 rounded-0 rounded-end-2">
-                  <SearchIcon className="magnify_hover"/>
+                  <SearchIcon className="magnify_hover" />
                 </Button>
               </Tooltip>
             </Form>
             <Nav className="justify-content-center align-items-center w-100 flex-grow-1 pe-3">
               <Nav.Link as={Link} to="/" className="my-md-0 my-3 me-md-3">
-              <Tooltip title="Go to Home" arrow className="d-flex flex-column flex-md-row justify-content-center align-items-center">
-                <HomeIcon className="me-1 text-dark magnify_hover"/><span>Home</span>
-              </Tooltip>
+                <Tooltip
+                  title="Go to Home"
+                  arrow
+                  className="d-flex flex-column flex-md-row justify-content-center align-items-center"
+                >
+                  <HomeIcon className="me-1 text-dark magnify_hover" />
+                  <span>Home</span>
+                </Tooltip>
               </Nav.Link>
-              <AccountCircleIcon className="magnify_hover"/>
+              <AccountCircleIcon className="magnify_hover" />
               <NavDropdown
                 title="Profile"
                 id={`offcanvasNavbarDropdown-expand-md`}
               >
                 <NavDropdown.Item className="text-primary disabled">
-                  {name ? name: "Anonymous User"}
+                  {name ? name : "Anonymous User"}
                 </NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/profile">
                   Update Details
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleLogout}>
+                  Logout
+                </NavDropdown.Item>
               </NavDropdown>
-              </Nav>
+            </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
       </Container>

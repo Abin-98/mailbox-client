@@ -8,19 +8,20 @@ import { authActions } from "../Store/reducers/authSlice";
 import axios from "axios";
 import { signInWithPopup } from "firebase/auth";
 import google from "../assets/google.png";
-import logo from '../assets/logo.png'
+import logo from "../assets/logo.png";
 
 const Signup = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const dispatch = useDispatch()
+  const [isLogin, setIsLogin] = useState(false)
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
+    password: ""
   });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
+  // handling normal signin
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,14 +36,14 @@ const Signup = () => {
     const obj = {
       email: userData.email,
       password: userData.password,
-      returnSecureToken: true,
+      returnSecureToken: true
     };
 
     try {
       const response = await axios.post(url, obj, {
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       });
 
       const data = response.data;
@@ -71,6 +72,7 @@ const Signup = () => {
     }
   };
 
+  // handling signin with google
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -95,15 +97,25 @@ const Signup = () => {
 
   return (
     <div className="signup template d-flex justify-content-center align-items-center min-vh-100 bg-signup">
-      <img src={logo} alt="logo" width={200} height={90} className="position-absolute top-0 p-4"/>
+      <img
+        src={logo}
+        alt="logo"
+        width={200}
+        height={90}
+        className="position-absolute top-0 p-4"
+      />
       <div className="form_container p-2 bg-white my-2">
         <div className="row w-100 h-100 px-3 py-1">
           <div
-            className={`col-lg-6 ${isLogin && "order-2"} col-12 bg-signup-interior border rounded-5`}
+            className={`col-lg-6 ${
+              isLogin && "order-2"
+            } col-12 bg-signup-interior border rounded-5`}
             style={{ minHeight: "40rem" }}
           ></div>
           <div
-            className={`col-lg-6 ${isLogin && "order-1"} col-12 h-100 p-5 rounded bg-white`}
+            className={`col-lg-6 ${
+              isLogin && "order-1"
+            } col-12 h-100 p-5 rounded bg-white`}
             style={{ minHeight: "40rem" }}
           >
             <form onSubmit={handleSubmit}>
@@ -174,11 +186,17 @@ const Signup = () => {
                   onClick={() => setIsLogin((prev) => !prev)}
                   className="btn btn-outline-dark ms-2"
                 >
-                  {isLogin ? "New Here? Sign Up" : "Already Registerd? Login here"}
+                  {isLogin
+                    ? "New Here? Sign Up"
+                    : "Already Registerd? Login here"}
                 </button>
               </p>
             </form>
-            <div className="w-full d-flex my-4"><hr className="line flex-grow-1 me-3"/><span>or</span><hr className="ms-3 line flex-grow-1"/></div>
+            <div className="w-full d-flex my-4">
+              <hr className="line flex-grow-1 me-3" />
+              <span>or</span>
+              <hr className="ms-3 line flex-grow-1" />
+            </div>
             <div className="w-full">
               <button
                 className="btn btn-light d-flex gap-3 align-items-center justify-content-center mx-auto border"

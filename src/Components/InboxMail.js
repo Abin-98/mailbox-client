@@ -10,14 +10,17 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import Truncate from "react-truncate";
 import { Tooltip } from "@mui/material";
 
-const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
-    const dispatch = useDispatch();
+const InboxMail = ({ mailData, id, sent, sendIDtoHome }) => {
+  const dispatch = useDispatch();
   const sentMailsList = useSelector((state) => state.mail.sentMailsList);
-  const inboxMailsList = useSelector(state => state.mail.inboxMailsList);
-  const [showModal, setShowModal] = useState(false);
+  const inboxMailsList = useSelector((state) => state.mail.inboxMailsList);
   const userEmail = useSelector((state) => state.auth.userEmail);
+  const [showModal, setShowModal] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [checked, setChecked] = useState(false);
   const emailEncoded = userEmail.replace(/\./g, "_");
-  const newDate = new Date(mailData?.date)
+  const newDate = new Date(mailData?.date);
+  const mailsList = sent ? sentMailsList : inboxMailsList;
   const formattedDate = newDate?.toLocaleString("en-IN", {
     day: "numeric",
     month: "short",
@@ -26,19 +29,22 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
     minute: "2-digit",
     hour12: false,
   });
+
   let url = "";
   url = sent
     ? `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/sent/${id}.json`
     : `https://mailbox-client-a6c40-default-rtdb.firebaseio.com/mails/${emailEncoded}/inbox/${id}.json`;
 
-  const mailsList = sent ? sentMailsList : inboxMailsList
-  const [isHovered, setIsHovered] = useState(false);
-  const [checked, setChecked] = useState(false)
-
-  const handleCheckChange =(e) =>{
-    setChecked(e.target.checked)   
-    sendIDtoHome({sent: sent, id: id, action:"delete", openMail: false, isChecked: e.target.checked})
-  }
+  const handleCheckChange = (e) => {
+    setChecked(e.target.checked);
+    sendIDtoHome({
+      sent: sent,
+      id: id,
+      action: "delete",
+      openMail: false,
+      isChecked: e.target.checked,
+    });
+  };
 
   const handleDelete = async () => {
     const newMailsList = { ...mailsList };
@@ -46,12 +52,10 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
 
     try {
       const response = await axios.delete(url);
-        console.log(response);
-    sent ?
-      dispatch(mailActions.addToSentMailList({ ...newMailsList }))
-    :
-      dispatch(mailActions.addToInboxMailList({ ...newMailsList }))
-
+      console.log(response);
+      sent
+        ? dispatch(mailActions.addToSentMailList({ ...newMailsList }))
+        : dispatch(mailActions.addToInboxMailList({ ...newMailsList }));
     } catch (err) {
       console.log(err);
     }
@@ -64,23 +68,32 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
           ...mailsList[id],
           read: true,
         });
-        console.log("Here in handleOpenMail()!!!", response.data);
+        console.log("from handleOpenMail()", response.data);
 
-        sent ? dispatch(mailActions.addToSentMailList({
-            ...mailsList,
-            [id]: { ...mailsList[id], read: true },
-          })
-        )  
-        : dispatch(mailActions.addToInboxMailList({
-              ...mailsList,
-              [id]: { ...mailsList[id], read: true },
-            })
-          )
+        sent
+          ? dispatch(
+              mailActions.addToSentMailList({
+                ...mailsList,
+                [id]: { ...mailsList[id], read: true },
+              })
+            )
+          : dispatch(
+              mailActions.addToInboxMailList({
+                ...mailsList,
+                [id]: { ...mailsList[id], read: true },
+              })
+            );
       } catch (err) {
         console.log(err);
       }
     }
-    sendIDtoHome({sent: sent, id: id, action:"show", openMail: true, isChecked: checked})
+    sendIDtoHome({
+      sent: sent,
+      id: id,
+      action: "show",
+      openMail: true,
+      isChecked: checked,
+    });
   };
 
   const handleReadToggle = async () => {
@@ -91,17 +104,19 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
       });
       console.log("handleReadToggle", response.data);
 
-      sent ? dispatch(
-        mailActions.addToSentMailList({
-          ...mailsList,
-          [id]: { ...mailsList[id], read: !mailsList[id].read },
-        })
-        ) 
-        : dispatch(mailActions.addToInboxMailList({
-          ...mailsList,
-          [id]: { ...mailsList[id], read: !mailsList[id].read },
-        })
-      )
+      sent
+        ? dispatch(
+            mailActions.addToSentMailList({
+              ...mailsList,
+              [id]: { ...mailsList[id], read: !mailsList[id].read },
+            })
+          )
+        : dispatch(
+            mailActions.addToInboxMailList({
+              ...mailsList,
+              [id]: { ...mailsList[id], read: !mailsList[id].read },
+            })
+          );
     } catch (err) {
       console.log(err);
     }
@@ -115,18 +130,19 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
       });
       console.log("handleStarToggle", response.data);
 
-      sent ? dispatch(
-        mailActions.addToSentMailList({
-          ...mailsList,
-          [id]: { ...mailsList[id], starred: !mailsList[id].starred },
-        })
-      ) 
-      : dispatch(
-        mailActions.addToInboxMailList({
-          ...mailsList,
-          [id]: { ...mailsList[id], starred: !mailsList[id].starred },
-        })
-      ) 
+      sent
+        ? dispatch(
+            mailActions.addToSentMailList({
+              ...mailsList,
+              [id]: { ...mailsList[id], starred: !mailsList[id].starred },
+            })
+          )
+        : dispatch(
+            mailActions.addToInboxMailList({
+              ...mailsList,
+              [id]: { ...mailsList[id], starred: !mailsList[id].starred },
+            })
+          );
     } catch (err) {
       console.log(err);
     }
@@ -134,7 +150,9 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
 
   return (
     <div
-      className={`container-fluid py-2 border-bottom border-1 border-secondary ${checked ? "inbox-checked" : "inbox_item"} `}
+      className={`container-fluid py-2 border-bottom border-1 border-secondary ${
+        checked ? "inbox-checked" : "inbox_item"
+      } `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       key={id}
@@ -150,17 +168,18 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
               // onChange={(e) => setAllChecked(prev=>!prev)}
             />
           </Form>
-          {sent?
-          <span className="p-1 mx-1"></span>
-          : <span
-            role="button"
-            style={{ width: "10px", height: "10px" }}
-            className={`rounded-circle px-1 mx-1 ${
-              mailData.read ? "border border-dark" : "bg-primary"
-            }`}
-            onClick={handleReadToggle}
-          ></span>
-        }
+          {sent ? (
+            <span className="p-1 mx-1"></span>
+          ) : (
+            <span
+              role="button"
+              style={{ width: "10px", height: "10px" }}
+              className={`rounded-circle px-1 mx-1 ${
+                mailData.read ? "border border-dark" : "bg-primary"
+              }`}
+              onClick={handleReadToggle}
+            ></span>
+          )}
         </div>
         <div className="col-2 d-flex justify-content-start align-items-center">
           {sent ? (
@@ -194,9 +213,11 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
             onClick={handleOpenMail}
           >
             <Truncate lines={1} ellipsis={<span>...</span>}>
-            <div
-                dangerouslySetInnerHTML={{ __html: mailData.subjectJSX + " >> " + mailData.bodyJSX }}
-                />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: mailData.subjectJSX + " >> " + mailData.bodyJSX,
+                }}
+              />
             </Truncate>
           </span>
           {/*<Truncate lines={1} ellipsis={<span className="w-100 flex-grow-1">...</span>}>
@@ -212,11 +233,11 @@ const InboxMail = ({ mailData, id, sent, sendIDtoHome, selectAll }) => {
         <div className="col-2 d-flex justify-content-end align-items-center">
           {isHovered ? (
             <Tooltip title="Delete this mail" arrow>
-            <DeleteIcon
-              role="button"
-              className="me-1 magnify_hover"
-              onClick={() => setShowModal(true)}
-            />
+              <DeleteIcon
+                role="button"
+                className="me-1 magnify_hover"
+                onClick={() => setShowModal(true)}
+              />
             </Tooltip>
           ) : (
             <span className="date">{formattedDate}</span>

@@ -9,18 +9,18 @@ import { authActions } from "../Store/reducers/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const idToken = useSelector((state) => state.auth.idToken);
+
   const dispatch = useDispatch();
+  const idToken = useSelector((state) => state.auth.idToken);
   const userName = useSelector((state) => state.auth.userName);
   const userProfilePic = useSelector((state) => state.auth.userProfilePic);
   const userEmail = useSelector((state) => state.auth.userEmail);
   const emailVerified = useSelector(state=>state.auth.emailVerified)
-  const navigate = useNavigate()
-
   const [updatedInfo, setUpdatedInfo] = useState({
     name: "",
     profilePic: "",
   });
+  const navigate = useNavigate()
 
   useEffect(() => {
     axios

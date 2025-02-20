@@ -13,22 +13,22 @@ const authSlice = createSlice({
   initialState: initialAuthState,
   reducers: {
     setIdToken(state, action) {
-      state.idToken = action.payload;
+      state.idToken = action.payload
     },
     setUserEmail(state, action) {
-      state.userEmail = action.payload;
+      state.userEmail = action.payload
     },
     setUserName(state, action) {
-      state.userName = action.payload;
+      state.userName = action.payload
     },
     setEmailVerified(state, action) {
-        state.emailVerified = action.payload;
+      state.emailVerified = action.payload
     },
     setProfilePic(state, action) {
-      state.emailVerified = action.payload;
+      state.emailVerified = action.payload
+    }
   }
-  },
 });
 
-export default authSlice.reducer;
+export default authSlice.reducer
 export const authActions = authSlice.actions;

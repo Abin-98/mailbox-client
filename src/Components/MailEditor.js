@@ -10,9 +10,10 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
 const MailEditor = ({ show, setShow }) => {
+  const dispatch = useDispatch();
   const [editorState1, setEditorState1] = useState(EditorState.createEmpty());
   const [editorState2, setEditorState2] = useState(EditorState.createEmpty());
-  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const sentMailsList = useSelector((state) => state.mail.sentMailsList);
   const inboxMailsList = useSelector((state) => state.mail.inboxMailsList);
   const userEmail = useSelector((state) => state.auth.userEmail);
@@ -22,6 +23,7 @@ const MailEditor = ({ show, setShow }) => {
     const rawContentState = convertToRaw(editorState1.getCurrentContent());
     return draftToHtml(rawContentState);
   };
+
   const getBodyHTML = () => {
     const rawContentState = convertToRaw(editorState2.getCurrentContent());
     return draftToHtml(rawContentState);
@@ -32,8 +34,6 @@ const MailEditor = ({ show, setShow }) => {
     setEditorState1(EditorState.createEmpty());
     setEditorState2(EditorState.createEmpty());
   };
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSend = async (data) => {
     try {
@@ -105,7 +105,7 @@ const MailEditor = ({ show, setShow }) => {
         })
       );
 
-      //sending to Inbox mails of reciever(s)
+      // sending to Inbox mails of reciever(s)
       inputs.forEach(async (input) => {
         const encoded = input.value.replace(/\./g, "_");
 
@@ -141,20 +141,20 @@ const MailEditor = ({ show, setShow }) => {
       setEditorState1(EditorState.createEmpty());
       setEditorState2(EditorState.createEmpty());
 
-      console.log(sentMailsList);
       setShow(false);
-      setIsLoading(false);
       toast.success("Mail Sent", { closeOnClick: true });
+
     } catch (err) {
       toast.error("Something went wrong!", { closeOnClick: true });
       console.log(err);
+      
+    } finally{
       setIsLoading(false);
     }
   };
 
   // Track the currently active editor
   const [activeEditor, setActiveEditor] = useState("editor1");
-
   const [inputs, setInputs] = useState([{ id: 1, value: "" }]);
 
   const addInputField = () => {
