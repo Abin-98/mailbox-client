@@ -1,66 +1,101 @@
-# Getting Started with Create React App
+# MailNest 📬
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-featured web-based email client built with React, powered by Firebase and Redux Toolkit.
 
-## Available Scripts
+## 🚀 Live Demo
 
-In the project directory, you can run:
+[mailbox-client-nu.vercel.app](https://mailbox-client-nu.vercel.app)
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## ✨ Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Google Sign-In** — Secure authentication via Firebase Auth
+- **Compose & Send** — Rich text email editor (Draft.js / react-draft-wysiwyg) with support for multiple recipients
+- **Real-time Inbox** — Inbox auto-refreshes every 5 seconds via Firebase Realtime Database
+- **Search** — Filter through your inbox with a dedicated search slice
+- **Responsive UI** — Built with MUI (Material UI) and React Bootstrap
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🛠️ Tech Stack
 
-### `npm run build`
+| Layer | Technology |
+|---|---|
+| Frontend | React 18, React Router v6 |
+| State Management | Redux Toolkit |
+| Auth & Database | Firebase Auth + Firebase Realtime Database |
+| UI Components | MUI v6, React Bootstrap 5 |
+| Rich Text Editor | Draft.js, react-draft-wysiwyg |
+| Notifications | React Toastify |
+| Deployment | Vercel |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📁 Project Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+src/
+├── assets/          # Images and static files
+├── Components/      # Reusable components (NavBar, MailEditor, InboxMail, MailContent)
+├── Pages/           # Route-level pages (Home, Signup, Profile)
+├── Store/
+│   ├── reducers/    # Redux slices (auth, mail, search)
+│   └── store.js     # Redux store config
+├── App.js
+└── FirebaseConfig.js
+```
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## ⚙️ Getting Started
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Prerequisites
+- Node.js >= 16
+- A Firebase project with Auth and Realtime Database enabled
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Installation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+git clone https://github.com/Abin-98/mailbox-client.git
+cd mailbox-client
+npm install --legacy-peer-deps
+```
 
-## Learn More
+### Environment Setup
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Create a `.env` file in the root with your Firebase config:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```env
+REACT_APP_FIREBASE_API_KEY=your_api_key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_auth_domain
+REACT_APP_FIREBASE_DATABASE_URL=your_database_url
+REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+REACT_APP_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+REACT_APP_FIREBASE_APP_ID=your_app_id
+```
 
-### Code Splitting
+### Run Locally
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+npm start
+```
 
-### Analyzing the Bundle Size
+### Build for Production
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+npm run build
+```
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 🚢 Deployment
 
-### Advanced Configuration
+Deployed on **Vercel**. A `.npmrc` file with `legacy-peer-deps=true` is included to handle peer dependency resolution during build.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## 📄 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+MIT
